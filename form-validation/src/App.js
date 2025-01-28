@@ -56,7 +56,8 @@ const App = () => {
               <input type="text" name='fname' id='fname' value={formdata.fname} className="form-control" onChange={nameValue} />
               {formdata.fname == "" ? error && <span style={{color:"red"}}>Please enter your name</span> : !error || ""}
             </div>
-            
+            {/* fname jo null hoy true thay to undar error print thase, nahi to else ma jashe */}
+        
 
     
             <div className="mb-3">
