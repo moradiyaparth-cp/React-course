@@ -2,13 +2,21 @@
   text-align: center;
 }
 
+form{
+  padding: 20px;
+}
+form label{
+  font-weight: 500;
+}
 table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
+  margin: 0 auto;
 }
 
 th, td{
   text-align: center;
+  padding: 10px;
 }
 .App-logo {
   height: 40vmin;
