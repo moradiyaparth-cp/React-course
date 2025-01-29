@@ -9,9 +9,11 @@ const App = () => {
   })
   // console.log("eee", formdata)
 
-  const [submitteddata, setsubmittedData] = useState(null)
+  const [submitteddata, setsubmittedData] = useState([])
 
   const [error, setError] = useState(false)
+
+  const [storevalue, setstoreValue] = useState([])
 
   const nameValue = (e) =>{
     setformData({...formdata, [e.target.name]: e.target.value})
@@ -37,14 +39,20 @@ const App = () => {
     e.preventDefault()
     if(formdata.fname === "" || formdata.email === "" || formdata.mobno.length !== 10 || formdata.standard === ""){
       setError(true)
+      
+  
     }
    
     else{
-      setsubmittedData(formdata)
+      submitteddata.push(formdata);
+      setstoreValue([{submitteddata} , ...storevalue] )
     }
-    
-    // console.log("eee", formdata.fname)
-    // console.log("aaa", setError)
+    setformData({
+      fname: "",
+      email: "",
+      mobno: "",
+      standard: ""
+    });
   }
   return (
     <>
@@ -92,9 +100,12 @@ const App = () => {
 
             <button type="submit" className="btn btn-primary my-3">Submit</button>
       </form>
-      <div>
-      {submitteddata && 
-        <table>
+      <div>      
+      </div>
+    </div>
+<div>
+{
+          <table>
         <tr>
             <th colSpan={6} ><h3>Submitted Data:</h3></th>
         </tr>
@@ -103,18 +114,24 @@ const App = () => {
             <th>Email</th>
             <th>Mobileno</th>
             <th>Standard</th>
+            <th>Action</th>
         </tr>
-        <tr>
-            <td>{formdata.fname}</td>
-            <td>{formdata.email}</td>
-            <td>{formdata.mobno}</td>
-            <td>{formdata.standard}</td>
+        {submitteddata.map((val, i)=>{
+        return (
+        <tr key={i}>
+            <td>{val.fname}</td>
+            <td>{val.email}</td>
+            <td>{val.mobno}</td>
+            <td>{val.standard}</td>
+            <td><button type="button" class="btn btn-primary">Edit</button> <button type="button" class="btn btn-danger">Delete</button></td>
         </tr>
+          )
+        })}
     </table>
-
-      }
-      </div>
-    </div>
+       
+}
+</div>
+   
     </>
   )
 }
