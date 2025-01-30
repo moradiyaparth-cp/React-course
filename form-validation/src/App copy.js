@@ -73,12 +73,7 @@ const App = () => {
   //    setudateButton(false) 
   //  }
 
-  const handleUpdate = (e) => {
-    e.preventDefault()
-    if(formdata.fname === "" || formdata.email === "" || formdata.mobno?.length !== 10 || formdata.standard === ""){
-      setError(true)
-      return
-    }
+  const handleUpdate = () => {
 
     if (editIndex !== null) {
       const updatedData = submitteddata.map((val,i) =>
@@ -94,7 +89,6 @@ const App = () => {
         mobno: "",
         standard: ""
       });
-      setError(false)
     }
   }
   return (
