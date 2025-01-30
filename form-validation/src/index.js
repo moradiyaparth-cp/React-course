@@ -8,8 +8,8 @@ import Axios from './AxiosExample';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
-    {/* <App /> */}
-    <Axios />
+    <App />
+    {/* <Axios /> */}
   </React.StrictMode>
 );
 

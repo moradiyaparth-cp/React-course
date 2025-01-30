@@ -15,23 +15,35 @@ const App = () => {
 
   const [submitteddata, setsubmittedData] = useState([])
   const [error, setError] = useState(false)
-  const [storevalue, setstoreValue] = useState([])
+  // const [storevalue, setstoreValue] = useState([])
   const [updatebutton, setudateButton] = useState(false)
   const [editIndex, setEditIndex] = useState()
+  const [emailError, setEmailError] = useState(false)
+
+  const validateEmail = (email) =>{
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)   // emailRegex ne test method thi match karshe user je email add kare 
+  }
 
   const data = (e) =>{
     setformData({...formdata, [e.target.name]: e.target.value})
+    if (e.target.name === 'email') {
+      setEmailError(!validateEmail(e.target.value)) // jyare validateEmail ni value equal no hoy tyare setEmailError aa error show thase
+    }
   }
   
   const handleSubmit = (e) =>{
     e.preventDefault()
-    if(formdata.fname === "" || formdata.email === "" || formdata.mobno?.length !== 10 || formdata.standard === ""){
+    if(formdata.fname === "" || formdata.email === "" || !validateEmail(formdata.email) || formdata.mobno?.length !== 10 || formdata.standard === ""){
       setError(true)
+      if(!validateEmail(formdata.email)){
+        setEmailError(true)  // jo formdata ni undar valid email no hoy to setemail error true thase ane error show thase
+      }
     }
     else
     {
-      submitteddata.push(formdata); // form data ne push kari didho submitteddata ma 
-      setstoreValue([{submitteddata} , ...storevalue])
+      submitteddata.push(formdata); // formdata ne push kari didho submitteddata ma 
+      // setstoreValue([{submitteddata} , ...storevalue])
       setformData({
         fname: "",
         email: "",
@@ -39,6 +51,7 @@ const App = () => {
         standard: ""
       });
       setError(false)
+      setEmailError(false)
     }
     // console.log("aaa", storevalue) // data check karshe
   }
@@ -75,8 +88,11 @@ const App = () => {
 
   const handleUpdate = (e) => {
     e.preventDefault()
-    if(formdata.fname === "" || formdata.email === "" || formdata.mobno?.length !== 10 || formdata.standard === ""){
+    if(formdata.fname === "" || formdata.email === "" || !validateEmail(formdata.email) || formdata.mobno?.length !== 10 || formdata.standard === ""){
       setError(true)
+      if(!validateEmail(formdata.email)){
+        setEmailError(true)  // jo formdata ni undar valid email no hoy to setemail error true thase ane error show thase
+      }
       return
     }
 
@@ -95,6 +111,7 @@ const App = () => {
         standard: ""
       });
       setError(false)
+      setEmailError(false)
     }
   }
   return (
@@ -131,7 +148,8 @@ const App = () => {
             <div className="mb-3">
               <label htmlFor="email" className="form-label">Enter Your Email address</label>
               <input type="email" name='email' id='email' value={formdata.email} className="form-control" onChange={data}/>
-              {formdata.email === "" ? error && <span style={{color:"red"}}>Please enter your email</span> : !error || ""}
+              {formdata.email === "" ? error && <span style={{color:"red"}}>Please enter your email</span> : 
+              emailError && <span style={{color:"red"}}>Please enter valid email</span> }
             </div>
 
             <div className="mb-3">
