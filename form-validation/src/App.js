@@ -32,15 +32,17 @@ const App = () => {
     {
       submitteddata.push(formdata); // form data ne push kari didho submitteddata ma 
       setstoreValue([{submitteddata} , ...storevalue])
+      setformData({
+        fname: "",
+        email: "",
+        mobno: "",
+        standard: ""
+      });
+      setError(false)
     }
     // console.log("aaa", storevalue) // data check karshe
 
-    setformData({
-      fname: "",
-      email: "",
-      mobno: "",
-      standard: ""
-    });
+   
   }
 
   const [show, setShow] = useState(false);
@@ -66,29 +68,17 @@ const App = () => {
     setShow(false)
    }
    
-   const editData = (i) => {
-    // console.log("dsdsd", i);
-    
+   const editData = (i) => {    
       setformData(submitteddata[i])
       setudateButton(true)
       setEditIndex(i)
    }
 
    const handleUpdate = () =>{
-  
-    // submitteddata.splice(editIndex, 1)
-    // setsubmittedData([...submitteddata])
-    // setformData(editIndex,1)
-     submitteddata[editIndex] = formdata
-    // console.log("update",a)
-    // setformData(submitteddata[i])
-  
-
-    setudateButton(false)
-    console.log("eee", setformData)
+      submitteddata[editIndex] = formdata
+     console.log("index", submitteddata[editIndex])
+     setudateButton(false) 
    }
-  //  console.log("aaa", submitteddata[i])
-  //  console.log("aaa",setsubmittedData)
   return (
     <>
     <div>
@@ -148,7 +138,7 @@ const App = () => {
           </select>
 
               <p>
-              {formdata.standard === "" ? error && <span style={{color:"red"}}>Mobile number must be atleast 10 number</span> : !error || ""}
+              {formdata.standard === "" ? error && <span style={{color:"red"}}>Please select your standard</span> : !error || ""}
               </p>
 
            {!updatebutton? <button type="submit" className="btn btn-primary my-3">Submit</button> :
