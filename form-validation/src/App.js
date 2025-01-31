@@ -42,14 +42,13 @@ const App = () => {
     }
     else
     {
-      submitteddata.push(formdata); // formdata ne push kari didho submitteddata ma 
-      // setstoreValue([{submitteddata} , ...storevalue])
+      setsubmittedData([formdata, ...submitteddata])
       setformData({
-        fname: "",
-        email: "",
-        mobno: "",
-        standard: ""
-      });
+          fname: "",
+          email: "",
+          mobno: "",
+          standard: ""
+        });
       setError(false)
       setEmailError(false)
     }
@@ -114,6 +113,9 @@ const App = () => {
       setEmailError(false)
     }
   }
+
+  const standardValue = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
   return (
     <>
     <div>
@@ -161,7 +163,8 @@ const App = () => {
             <label htmlFor="select" className="form-label">Select Your Standard</label>
             <select className="form-select" aria-label="Default select example" id='standard' name='standard' value={formdata.standard} onChange={data}>
               <option value="" selected>- Select -</option>
-              <option value="1">1</option>
+              {standardValue.map((e, index)=><option key={index} value={e}>{e}</option>)}
+              {/* <option value="1">1</option>
               <option value="2">2</option>
               <option value="3">3</option>
               <option value="4">4</option>
@@ -170,7 +173,7 @@ const App = () => {
               <option value="7">7</option>
               <option value="8">8</option>
               <option value="9">9</option>
-              <option value="10">10</option>
+              <option value="10">10</option> */}
           </select>
 
               <p>
