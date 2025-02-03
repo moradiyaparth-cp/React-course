@@ -1,8 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+import Modal from 'react-bootstrap/Modal';
 
 const Card = () => {
     const [userData, setData] = useState([])
+    const [storeCard, setStoreCard] = useState(null)
 
     useEffect(() => {
         axios.get('https://api.escuelajs.co/api/v1/products')
@@ -27,11 +31,94 @@ const Card = () => {
         .then(()=>{
             const readData = userData.filter(userData => userData.id === id);
             setData(readData)
-            console.log('Readmore Data:', readData);
+            // console.log('Readmore Data:', readData);
         })   
     }
 
+    const [show, setShow] = useState(false);
+   
+ 
+    const handleShow = (card) =>{
+        setStoreCard(card) // je card ne select karshe eni value setStoreCard ma store thase
+        // console.log("aaa",card)
+        setShow(true)
+    }
+
+    const handleClose = () => {
+        setShow(false)
+        setStoreCard(null)
+    }
+    const handleUpdate = () => {
+        if (!storeCard) return; // storeCard ni detail no hoy to niche return thavu pade
+
+        axios.put(`https://api.escuelajs.co/api/v1/products/${storeCard.id}`, {
+            images: storeCard.images,
+            title: storeCard.title,
+            price: storeCard.price,
+            description: storeCard.description
+        })
+        // console.log("aaa: ", storeCard.description)
+        .then((response)=>{
+            const updateData = userData.map(val=>
+                val.id === storeCard.id ? response.data : val
+            )
+            setData(updateData)
+            handleClose();
+
+        })
+    }
+
   return (
+    <>
+    <div>
+        
+    <Modal show={show} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Update Product</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+            {storeCard && (
+          <Form>
+            <Form.Group className="mb-3">
+              <Form.Label>Enter Title</Form.Label>
+              <Form.Control
+                type="text"
+                value={storeCard.title}
+                onChange={(e) => setStoreCard({...storeCard, title: e.target.value})} // value edit karva dese
+              />
+              </Form.Group>
+              <Form.Group className="mb-3">
+              <Form.Label>Enter Price</Form.Label>
+              <Form.Control
+                type="text"
+                value={storeCard.price}
+                onChange={(e) => setStoreCard({...storeCard, price: e.target.value})}
+              />
+            </Form.Group>
+            <Form.Group
+              className="mb-3"
+              
+            >
+              <Form.Label>Enter Description</Form.Label>
+              <Form.Control as="textarea" rows={3} 
+              value={storeCard.description}
+              onChange={(e) => setStoreCard({...storeCard, description: e.target.value})}
+              />
+            </Form.Group>
+          </Form>
+          )}
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleClose}>
+            Close
+          </Button>
+          <Button variant="primary" onClick={handleUpdate}>
+            Update
+          </Button>
+        </Modal.Footer>
+      </Modal>
+    </div>
+
     <div>
                 <div className="container">
                     <div className="row">
@@ -41,18 +128,19 @@ const Card = () => {
                             <img src={data.images} className="card-img-top" alt="img not load" />
                             <div className="card-body">
                                 <h5 className="card-title">{data.title}</h5>
-                                <p className="card-text">Price: {data.price}</p>
-                                <p className="card-text">Description: {data.description}</p>
-                                <a target="_blank" className="btn btn-primary" onClick={()=>handlereadMore(data.id)}>Read More</a>
-                                <a className="btn btn-primary mx-2" onClick={() => handledeletCard(data.id)}>Delete</a>
+                                <p className="card-text"><b>Price:</b> {data.price}</p>
+                                <p className="card-text"><b>Description:</b> {data.description}</p>
+                                <a target="_blank" className="btn btn-primary mx-2" onClick={()=>handlereadMore(data.id)}>Read More</a>
+                                <a className="btn btn-danger mx-2" onClick={() => handledeletCard(data.id)}>Delete</a>
+                                <a className="btn btn-secondary mx-2" onClick={()=> handleShow(data)}>Update</a>
                             </div>
                             </div>
                         </div>
                         ))}
                     </div>
                 </div>
-            
     </div>
+    </>
   )
 }
 
