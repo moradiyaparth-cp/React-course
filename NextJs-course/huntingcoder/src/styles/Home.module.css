@@ -153,7 +153,9 @@ a.secondary {
     filter: invert();
   }
 }
-
+.main h1{
+  font-size: 48px;
+}
 .mainnav ul{
   display: flex;
   justify-content: center;
