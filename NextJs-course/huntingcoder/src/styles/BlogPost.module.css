@@ -7,9 +7,12 @@
     align-items: center;
     padding-top: 3rem;
   }
-  .main h3{
+  .main h1{
     padding: 10px;
   }
   .main p{
     padding: 10px;
+  }
+  .container{
+    padding: 0 22rem;
   }
