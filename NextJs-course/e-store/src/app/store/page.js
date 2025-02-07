@@ -12,7 +12,6 @@ const StorePage = () => {
   )
 }
 
-
 const CategoryListing = async () =>{
   const data = await getCategories();
   return <div className=''>
