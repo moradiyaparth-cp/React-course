@@ -14,7 +14,10 @@ const Cart = () => {
                 ))}
             </div>
             <div className="col-4">
-
+                <div className="bg-secondary">
+                    <h5>Total Items: </h5>
+                    <h5>Total Price: </h5>
+                </div>
             </div>
         </div>
     </div>
