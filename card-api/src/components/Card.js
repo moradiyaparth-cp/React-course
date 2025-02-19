@@ -207,7 +207,7 @@ const Card = () => {
                         {userData.length >= 0 && userData.map((data) => (
                         <div className="col-lg-4 col-md-6 mb-4" key={data.id}>
                             <div className="card" >
-                            <img src={data.images} className="card-img-top" alt="img not load" />
+                            <img src={!data.images ? "https://i.imgur.com/Lqaqz59.jpeg" : data.images} className="card-img-top" alt="img not load" />
                             <div className="card-body">
                                 <h5 className="card-title">Title: {data.title}</h5>
                                 <p className="card-text"><b>Price:</b> {data.price}</p>
