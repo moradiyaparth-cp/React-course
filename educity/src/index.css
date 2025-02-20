@@ -37,3 +37,18 @@ a{
     width: 20px;
     margin-left: 10px;
 }
+.btn.dark-btn{
+    background: #212EA0;
+    color: #fff;
+}
+
+
+@media (max-width: 1200px){
+    .container{
+        padding-left: 5%;
+        padding-right: 5%;
+    }
+    .btn{
+        padding: 14px 22px;
+    }
+}
