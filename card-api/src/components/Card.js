@@ -7,15 +7,15 @@ import Modal from 'react-bootstrap/Modal';
 const Card = () => {
     const [userData, setData] = useState([])
     const [storeCard, setStoreCard] = useState(null)
-
+   
     useEffect(() => {
-        axios.get('https://api.escuelajs.co/api/v1/products')
-        .then((response)=>{
-            // console.log("aaa",response) // badha j data asvhe
-            setData(response.data)
-        })      
-    }, [])
-    
+      axios.get('https://api.escuelajs.co/api/v1/products')
+      .then((response) => {
+          const fetchData = response.data.map(item => ({...item, images: (item.images) ? item.images : "https://i.imgur.com/3oXNBst.jpeg"}));
+          // console.log("aaa", fetchData)
+          setData(fetchData);
+      })
+  }, []);
     
     const handledeletCard = (id) =>{
         axios.delete(`https://api.escuelajs.co/api/v1/products/${id}`)
@@ -69,7 +69,7 @@ const Card = () => {
         })
     }
     const handleAdd = () => setAddProduct(true);
-    const Adddata = {images: ["https://i.imgur.com/jb5Yu0h.jpeg"], categoryId: 1, title: '', price: '', description:''}
+    const Adddata = {images: ["https://i.imgur.com/jb5Yu0h.jpeg"], categoryId: '', title: '', price: '', description:''}
     const [inputData, setInputData] = useState(Adddata)
 
     const handleSubmit = (e) => {
@@ -109,8 +109,9 @@ const Card = () => {
                   <Form.Control
                     type="text"
                     name='category'
-                    value={inputData.category}
-                    onChange={(e) => setInputData({...inputData, category: e.target.value})} // value edit karva dese
+                    value={inputData.categoryId}
+                    placeholder='Enter CategoryId 1 to 5'
+                    onChange={(e) => setInputData({...inputData, categoryId: e.target.value})} // value edit karva dese
                   />
                   </Form.Group>
                 <Form.Group className="mb-3">
@@ -207,7 +208,7 @@ const Card = () => {
                         {userData.length >= 0 && userData.map((data) => (
                         <div className="col-lg-4 col-md-6 mb-4" key={data.id}>
                             <div className="card" >
-                            <img src={!data.images ? "https://i.imgur.com/Lqaqz59.jpeg" : data.images} className="card-img-top" alt="img not load" />
+                            <img src={data.images} className="card-img-top" alt="img not load" onError={(e) => e.target.src = "https://i.imgur.com/3oXNBst.jpeg"} />
                             <div className="card-body">
                                 <h5 className="card-title">Title: {data.title}</h5>
                                 <p className="card-text"><b>Price:</b> {data.price}</p>
