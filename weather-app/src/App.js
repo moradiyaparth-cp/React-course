@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import './App.css';
 import Highlights from './components/Highlights';
-import Temprature2 from './components/Temprature2';
+import Temperature from './components/Temprature';
 
 function App() {
   const [city, setCity] = useState("New Delhi");
@@ -31,7 +31,7 @@ function App() {
           </div>
         ) : (
           weatherData && (
-            <Temprature2
+            <Temperature
               setCity={setCity}
               stats={{
                 temp: weatherData.current.temp_c,
