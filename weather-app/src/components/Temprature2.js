@@ -1,8 +1,8 @@
 import React from 'react'
 
-function Temprature({setCity, stats}) {
+function Temprature2({setCity, stats}) {
     const handleCityChange = (e) => {
-        console.log("aaa", e)
+        // console.log("aaa", e)
         setCity(e.target.value)
     }
   return (
@@ -56,4 +56,4 @@ function Temprature({setCity, stats}) {
   )
 }
 
-export default Temprature
+export default Temprature2
