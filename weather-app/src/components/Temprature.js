@@ -38,6 +38,31 @@ function Temperature({ setCity, stats }) {
     } 
   };
 
+  const handleCurrentLocation = async () => {
+    setLoading(true);
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(async (position) => { // user ni position leshe
+        const { latitude, longitude } = position.coords;
+        const apiURL = `https://api.weatherapi.com/v1/current.json?key=b1ba696253bf4db1b4d71630252402&q=${latitude},${longitude}&aqi=no`;
+
+          const response = await axios.get(apiURL); // weather fetch karshe current location mate
+          if (response.data.error) {
+            setError('Unable to fetch weather on current location');
+          } 
+          else {
+            setError('');
+            setCity(response.data.location.name);
+            // console.log(response.data)
+          }
+      });
+    } 
+    else {
+      setError('Geolocation is not supported on this browser.');
+      setLoading(false);
+    }
+    setLoading(false)
+  };
+
 
   return (
     <>
@@ -47,7 +72,7 @@ function Temperature({ setCity, stats }) {
 
         <button className="bg-blue-600 text-white p-2 ml-2 rounded" onClick={handleSearch}>Search</button>
 
-
+        <button className="bg-blue-600 text-white p-2 ml-2 rounded" onClick={handleCurrentLocation}>Current Location</button>
       </div>
 
       {loading && (
