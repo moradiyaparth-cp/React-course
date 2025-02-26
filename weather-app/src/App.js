@@ -15,6 +15,7 @@ function App() {
     setLoading(true);
     axios.get(apiURL)
       .then((response) => {
+        console.log(response.data)
         setWeatherData(response.data);
         setLoading(false);
       });

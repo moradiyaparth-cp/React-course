@@ -57,12 +57,15 @@ function Temperature({ setCity, stats }) {
   };
 
 
-const weatherCondition = () => {
+  const weatherCondition = () => {
     if (stats.condition == "Clear") {
       return <img src="//cdn.weatherapi.com/weather/64x64/night/113.png" alt="Clear image" />
     } 
     else if (stats.condition == "Sunny") {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/113.png" alt="Sunny image" />
+    }
+    else if (stats.condition == "Cloudy") {
+      return <img src="https://cdn.weatherapi.com/weather/64x64/day/119.png" alt="Cloudy image" />
     }
     else if (stats.condition == "Overcast") {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/122.png" alt="Overcast image" />
@@ -70,14 +73,14 @@ const weatherCondition = () => {
     else if (stats.condition == "Partly Cloudy" || stats.condition == "Partly cloudy") {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/116.png" alt="Partly cloudy image" />
     }
-    else if (stats.condition == "Light rain") {
+    else if (stats.condition == "Light rain" || stats.condition == "Moderate rain") {
       return <img src="//cdn.weatherapi.com/weather/64x64/night/296.png" alt="Light rain image" />
     }
     else if (stats.condition == "Mist") {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/143.png" alt="Mist image" />
     }
-    else if (stats.condition == "Moderate rain") {
-      return <img src="https://cdn.weatherapi.com/weather/64x64/night/302.png" alt="Moderate rain image" />
+    else if (stats.condition == "Light snow") {
+      return <img src="https://cdn.weatherapi.com/weather/64x64/night/326.png" alt="Light snow" />
     }
     else{
       return <img src="//cdn.weatherapi.com/weather/64x64/day/113.png" alt="Default image" />
