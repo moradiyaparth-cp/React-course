@@ -21,18 +21,18 @@ function Temperature({ setCity, stats }) {
       return;
     }
     try {
-      const response = await axios.get(apiURL);
-      if (response.data.error) {
-        setError('No city found');
-      } else {
-        setError('');
-        setCity(cityName);
+        const response = await axios.get(apiURL);
+        if (response.data.error) {
+          setError('No city found');
+        } else {
+          setError('');
+          setCity(cityName);
+        }
+      } catch (error) {
+        setError('City not found');
+        setLoading(false);
       }
-    } catch (error) {
-      setError('City not found');
-      setLoading(false);
-    }
-  };
+    };
 
   const handleCurrentLocation = async () => {
     setLoading(true);
@@ -49,7 +49,8 @@ function Temperature({ setCity, stats }) {
           setCity(response.data.location.name);
         }
       });
-    } else {
+    } 
+    else {
       setError('Geolocation is not supported on this browser.');
       setLoading(false);
     }
@@ -81,6 +82,9 @@ function Temperature({ setCity, stats }) {
     }
     else if (stats.condition == "Light snow") {
       return <img src="https://cdn.weatherapi.com/weather/64x64/night/326.png" alt="Light snow" />
+    }
+    else if (stats.condition == "Thundery outbreaks in nearby") {
+      return <img src="https://cdn.weatherapi.com/weather/64x64/day/200.png" alt="Thundery outbreaks in nearby" />
     }
     else{
       return <img src="//cdn.weatherapi.com/weather/64x64/day/113.png" alt="Default image" />
@@ -118,10 +122,9 @@ function Temperature({ setCity, stats }) {
 
       {!loading && stats && (
         <>
-
-            <div className='flex justify-center mt-8'>
+          <div className='flex justify-center mt-8'>
             {stats.condition ? weatherCondition()  : <img src="//cdn.weatherapi.com/weather/64x64/day/113.png" alt="default image" /> }
-            </div>
+          </div>
 
           <div className="flex justify-center mt-8">
             <p className="font-semibold text-[55px] text-white">{stats.temp}°C</p>
