@@ -5,7 +5,7 @@ import Highlights from './components/Highlights';
 import Temperature from './components/Temprature';
 
 function App() {
-  const [city, setCity] = useState("New Delhi");
+  const [city, setCity] = useState("Bhavnagar");
   const [weatherData, setWeatherData] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -13,18 +13,16 @@ function App() {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(apiURL) 
+    axios.get(apiURL)
       .then((response) => {
-        // console.log(response.data);
-        setWeatherData(response.data); 
-        setLoading(false); 
-      })
-     
+        setWeatherData(response.data);
+        setLoading(false);
+      });
   }, [city]);
 
   return (
-    <div className="bg-[#1F213A] h-screen flex justify-center align-top">
-      <div className="mt-40 w-1/5 h-1/3">
+    <div className="bg-[#1F213A] min-h-screen flex flex-col items-center p-5">
+      <div className="mt-10 w-full sm:w-4/5 md:w-3/5 lg:w-1/3">
         {loading ? (
           <div className="flex justify-center">
             <div className="spinner-border animate-spin border-4 border-t-4 border-blue-600 rounded-full w-8 h-8"></div>
@@ -45,8 +43,8 @@ function App() {
         )}
       </div>
 
-      <div className="mt-40 w-1/3 h-1/3 p-10 grid grid-cols-2 gap-6">
-        <h2 className="text-slate-200 text-2xl col-span-2">Today's Highlights</h2>
+      <div className="mt-10 w-full sm:w-4/5 md:w-3/5 lg:w-1/2 p-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
+        <h2 className="text-slate-200 text-2xl col-span-2 text-center sm:text-center">Today's Highlights</h2>
         {weatherData && (
           <>
             <Highlights
@@ -57,7 +55,6 @@ function App() {
                 direction: weatherData.current.wind_dir,
               }}
             />
-
             <Highlights
               stats={{
                 title: "Humidity",
