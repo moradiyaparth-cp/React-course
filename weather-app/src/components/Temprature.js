@@ -1,14 +1,33 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Country, State, City } from 'country-state-city';
 
 function Temperature({ setCity, stats }) {
   const [error, setError] = useState('');
   const [cityName, setCityName] = useState('');
   const [loading, setLoading] = useState(false);
 
-  const handleCityChange = (e) => {
-    setCityName(e.target.value);
-  };
+ // start Country, State, City -----------------------------------------------------------------------------------
+  const [countries, setCountries] = useState(Country.getAllCountries());
+  const [states, setStates] = useState([]);
+  const [cities, setCities] = useState([]);
+
+  const [selectedCountry, setSelectedCountry] = useState(null)
+  const [selectedState, setSelectedState] = useState(null)
+
+
+  const handleCountryChange = (country) => {
+    setSelectedCountry(country)
+    setStates(State.getStatesOfCountry(country.isoCode))
+    setCities([])
+  }
+
+  const handleStateChange = (state) => {
+    setSelectedState(state)
+    setCities(City.getCitiesOfState(selectedCountry.isoCode, state.isoCode))
+  }
+
+ // end Country, State, City -----------------------------------------------------------------------------------
 
   const handleSearch = async () => {
     setLoading(true);
@@ -95,13 +114,55 @@ function Temperature({ setCity, stats }) {
   return (
     <>
       <div className="flex flex-col sm:flex-row items-center gap-2">
-        <input
+        {/* <input
           type="text"
           className="bg-slate-600 border border-slate-500 text-slate-200 placeholder-slate-400 text-md w-full sm:w-60 p-2 focus:outline-none focus:border-slate-400"
           placeholder="Enter Your City Name"
           value={cityName}
           onChange={handleCityChange}
-        />
+        /> */}
+
+    {/* start Country, State, City ----------------------------------------------------------------------------------- */}
+       
+       <div className='container'>
+          <div className='row'>
+
+              <div className='w-50'>
+                <select className='form-select' 
+                  onChange={(e) => handleCountryChange(countries.find((c) => c.isoCode === e.target.value))}>
+                  <option value="">Select Country</option>
+
+                  {countries.map((country) => (
+                    <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
+                  ))}
+
+                </select>
+              </div>
+
+              <div className='w-50'>
+              <select disabled={!selectedCountry} className='form-select' 
+              onChange={(e) => handleStateChange(states.find((s) => s.isoCode === e.target.value))}>
+
+                  <option value="">Select State</option>
+                  {states.map((state) => (
+                    <option key={state.isoCode} value={state.isoCode}>{state.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className='w-50'>
+              <select disabled={!selectedState} className='form-select'>
+                  <option value="">Select City</option>
+                  {cities.map((city) => (
+                    <option key={city.isoCode} value={city.isoCode}>{city.name}</option>
+                  ))}
+
+                </select>
+              </div>
+          </div>
+       </div>
+
+      {/*  end Country, State, City ----------------------------------------------------------------------------------- */}
 
         <button className="bg-blue-600 text-white p-2 rounded w-full sm:w-auto" onClick={handleSearch}>
           Search
