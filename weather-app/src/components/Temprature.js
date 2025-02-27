@@ -10,10 +10,10 @@ function Temperature({ setCity, stats }) {
   const [countries, setCountries] = useState(Country.getAllCountries());
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-
+  
   const [selectedCountry, setSelectedCountry] = useState(null)
   const [selectedState, setSelectedState] = useState(null)
-  const [selectedCity, setSelectedCity] = useState(null);
+  const [selectedCity, setSelectedCity] = useState(null); // selectedCity ma select thayelu city store karshe
 
 
   const handleCountryChange = (country) => {

@@ -44,7 +44,7 @@ function App() {
         )}
       </div>
 
-      <div className="mt-10 w-full sm:w-4/5 md:w-3/5 lg:w-1/2 p-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div className="w-full sm:w-4/5 md:w-3/5 lg:w-1/2 p-5 grid grid-cols-1 sm:grid-cols-2 gap-6">
         <h2 className="text-slate-200 text-2xl col-span-2 text-center sm:text-center">Today's Highlights</h2>
         {weatherData && (
           <>
