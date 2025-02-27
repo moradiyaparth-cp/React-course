@@ -29,26 +29,27 @@ function Temperature({ setCity, stats }) {
 
  // end Country, State, City -----------------------------------------------------------------------------------
 
-  const handleSearch = async () => {
+    const handleSearch = async () => {
     setLoading(true);
     const apiURL = `https://api.weatherapi.com/v1/current.json?key=b1ba696253bf4db1b4d71630252402&q=${selectedCity}&aqi=no`;
-
+  
     try {
-        const response = await axios.get(apiURL);
-        if (response.data.error) {
-          setError('No city found');
-        } 
-        else {
-          setError('');
-          setCity(selectedCity);
-        }
+      const response = await axios.get(apiURL);
+      if (response.data.error) {
+        setError('No city found');
       } 
-      catch (error) {
-        setError('City not found');
-        setLoading(false);
+      else {
+        setCity(selectedCity);
+        console.log("City: ", selectedCity);
+        fetchForecast(); 
       }
-    };
-
+    } 
+    catch (error) {
+      setError('City not found');
+      setLoading(false);
+    } 
+  };
+  
   const handleCurrentLocation = async () => {
     setLoading(true);
     if (navigator.geolocation) {
@@ -105,6 +106,27 @@ function Temperature({ setCity, stats }) {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/113.png" alt="Default image" />
     }
   }
+
+
+  const [forecast, setForecast] = useState(null);
+  
+  // start 5 day weather forecast ---------------------------------------------------------------------- //
+  
+  const fetchForecast = async () => {
+    console.log("Selected city: ", selectedCity);
+    try {
+      const response = await axios.get(
+        `https://api.openweathermap.org/data/2.5/forecast?q=${selectedCity}&units=metric&appid=274a4aa2515102a49db248030393d0f8`
+      );
+      setForecast(response.data);
+      console.log("Forecast Data: ", response.data);
+    } 
+    catch (err) {
+      setForecast(null);
+    }
+  };
+
+  // end 5 day weather forecast  ---------------------------------------------------------------------- //
 
   return (
     <div className="p-5 w-full max-w-lg mx-auto">
@@ -181,6 +203,41 @@ function Temperature({ setCity, stats }) {
           </div>
         </>
       )}
+
+
+
+      
+      {/*  start 5 day weather forecast  ---------------------------------------------------------------------- */}
+      <div className='"text-slate-200'>
+        <h1 className="text-slate-200 text-2xl col-span-2 text-center sm:text-center">5 Day Weather Forecast</h1>
+
+        {forecast && (
+        <div className="forecast-container">
+          {forecast.list.filter((_, index) => index % 8 === 0)
+          .map((item, index) => (
+            <div key={index} className="forecast-card">
+              <p className="date">
+                {new Date(item.dt_txt).toLocaleDateString("en-US", {
+                  weekday: "long",
+                })}
+              </p>
+              <img 
+              src={`http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`} />
+              <p className="description">{item.weather[0].description}</p>
+              <p className="temp">{Math.round(item.main.temp)}C</p>
+              <div className="details">
+                <p>Humidity: {item.main.humidity}</p>
+                <p>Wind: {item.wind.speed}</p>
+                </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      </div>
+       {/* end 5 day weather forecast  ---------------------------------------------------------------------- */}
+
+
     </div>
   );
 }
