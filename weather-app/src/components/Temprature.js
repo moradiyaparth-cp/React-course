@@ -4,7 +4,6 @@ import { Country, State, City } from 'country-state-city';
 
 function Temperature({ setCity, stats }) {
   const [error, setError] = useState('');
-  const [cityName, setCityName] = useState('');
   const [loading, setLoading] = useState(false);
 
  // start Country, State, City -----------------------------------------------------------------------------------
@@ -14,6 +13,7 @@ function Temperature({ setCity, stats }) {
 
   const [selectedCountry, setSelectedCountry] = useState(null)
   const [selectedState, setSelectedState] = useState(null)
+  const [selectedCity, setSelectedCity] = useState(null);
 
 
   const handleCountryChange = (country) => {
@@ -31,23 +31,19 @@ function Temperature({ setCity, stats }) {
 
   const handleSearch = async () => {
     setLoading(true);
-    const apiURL = `https://api.weatherapi.com/v1/current.json?key=b1ba696253bf4db1b4d71630252402&q=${cityName}&aqi=no`;
+    const apiURL = `https://api.weatherapi.com/v1/current.json?key=b1ba696253bf4db1b4d71630252402&q=${selectedCity}&aqi=no`;
 
-    if (cityName === "") {
-      alert("Please Enter Any City Name");
-      setLoading(false);
-      setError('');
-      return;
-    }
     try {
         const response = await axios.get(apiURL);
         if (response.data.error) {
           setError('No city found');
-        } else {
+        } 
+        else {
           setError('');
-          setCity(cityName);
+          setCity(selectedCity);
         }
-      } catch (error) {
+      } 
+      catch (error) {
         setError('City not found');
         setLoading(false);
       }
@@ -110,66 +106,51 @@ function Temperature({ setCity, stats }) {
     }
   }
 
- 
   return (
-    <>
-      <div className="flex flex-col sm:flex-row items-center gap-2">
-        {/* <input
-          type="text"
-          className="bg-slate-600 border border-slate-500 text-slate-200 placeholder-slate-400 text-md w-full sm:w-60 p-2 focus:outline-none focus:border-slate-400"
-          placeholder="Enter Your City Name"
-          value={cityName}
-          onChange={handleCityChange}
-        /> */}
+    <div className="p-5 w-full max-w-lg mx-auto">
+    
+     {/* start Country, State, City ----------------------------------------------------------------------------------- */}
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        <select className="p-2 border rounded" onChange={(e) => handleCountryChange(countries.find((c) => c.isoCode === e.target.value))}>
+          <option value="">Select Country</option>
+          {countries.map((country) => (
+            <option key={country.isoCode} value={country.isoCode}>
+              {country.name}
+            </option>
+          ))}
+        </select>
 
-    {/* start Country, State, City ----------------------------------------------------------------------------------- */}
-       
-       <div className='container'>
-          <div className='row'>
+        <select
+          disabled={!selectedCountry}
+          className="p-2 border rounded" onChange={(e) => handleStateChange(states.find((s) => s.isoCode === e.target.value))}>
+          <option value="">Select State</option>
+          {states.map((state) => (
+            <option key={state.isoCode} value={state.isoCode}>
+              {state.name}
+            </option>
+          ))}
+        </select>
 
-              <div className='w-50'>
-                <select className='form-select' 
-                  onChange={(e) => handleCountryChange(countries.find((c) => c.isoCode === e.target.value))}>
-                  <option value="">Select Country</option>
-
-                  {countries.map((country) => (
-                    <option key={country.isoCode} value={country.isoCode}>{country.name}</option>
-                  ))}
-
-                </select>
-              </div>
-
-              <div className='w-50'>
-              <select disabled={!selectedCountry} className='form-select' 
-              onChange={(e) => handleStateChange(states.find((s) => s.isoCode === e.target.value))}>
-
-                  <option value="">Select State</option>
-                  {states.map((state) => (
-                    <option key={state.isoCode} value={state.isoCode}>{state.name}</option>
-                  ))}
-                </select>
-              </div>
-
-              <div className='w-50'>
-              <select disabled={!selectedState} className='form-select'>
-                  <option value="">Select City</option>
-                  {cities.map((city) => (
-                    <option key={city.isoCode} value={city.isoCode}>{city.name}</option>
-                  ))}
-
-                </select>
-              </div>
-          </div>
-       </div>
-
-      {/*  end Country, State, City ----------------------------------------------------------------------------------- */}
-
-        <button className="bg-blue-600 text-white p-2 rounded w-full sm:w-auto" onClick={handleSearch}>
+        <select
+          disabled={!selectedState}
+          className="p-2 border rounded" value={selectedCity} onChange={(e) => setSelectedCity(e.target.value)}>
+          <option value="">Select City</option>
+          {cities.map((city) => (
+            <option key={city.name} value={city.name}>
+              {city.name}
+            </option>
+          ))}
+        </select>
+      </div>
+        {/*  end Country, State, City ----------------------------------------------------------------------------------- */}
+    
+      <div className="flex flex-col sm:flex-row gap-2">
+        <button className="bg-blue-600 text-white p-2 rounded w-full sm:w-auto" disabled={!selectedCity} onClick={handleSearch}>
           Search
         </button>
 
         <button className="bg-blue-600 text-white p-2 rounded w-full sm:w-auto" onClick={handleCurrentLocation}>
-          Current&nbsp;Location
+          Current Location
         </button>
       </div>
 
@@ -178,8 +159,8 @@ function Temperature({ setCity, stats }) {
           <div className="spinner-border animate-spin border-4 border-t-4 border-blue-600 rounded-full w-8 h-8"></div>
         </div>
       )}
-
-      {error && <div className="flex justify-center mt-4 text-red-500">{error}</div>}
+     
+      {error && <div className="text-red-500 mt-4 text-center">{error}</div>}
 
       {!loading && stats && (
         <>
@@ -200,7 +181,7 @@ function Temperature({ setCity, stats }) {
           </div>
         </>
       )}
-    </>
+    </div>
   );
 }
 
