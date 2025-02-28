@@ -6,7 +6,7 @@ function Temperature({ setCity, stats }) {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
 
- // start Country, State, City -----------------------------------------------------------------------------------
+  // start Country, State, City -----------------------------------------------------------------------------------
   const [countries, setCountries] = useState(Country.getAllCountries());
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
@@ -14,7 +14,6 @@ function Temperature({ setCity, stats }) {
   const [selectedCountry, setSelectedCountry] = useState(null)
   const [selectedState, setSelectedState] = useState(null)
   const [selectedCity, setSelectedCity] = useState(null); // selectedCity ma select thayelu city store karshe
-
 
   const handleCountryChange = (country) => {
     setSelectedCountry(country)
@@ -27,9 +26,9 @@ function Temperature({ setCity, stats }) {
     setCities(City.getCitiesOfState(selectedCountry.isoCode, state.isoCode))
   }
 
- // end Country, State, City -----------------------------------------------------------------------------------
+  // end Country, State, City -----------------------------------------------------------------------------------
 
-    const handleSearch = async () => {
+  const handleSearch = async () => {
     setLoading(true);
     const apiURL = `https://api.weatherapi.com/v1/current.json?key=b1ba696253bf4db1b4d71630252402&q=${selectedCity}&aqi=no`;
   
@@ -41,7 +40,6 @@ function Temperature({ setCity, stats }) {
       else {
         setCity(selectedCity);
         console.log("City: ", selectedCity);
-        fetchForecast(); 
       }
     } 
     catch (error) {
@@ -49,7 +47,7 @@ function Temperature({ setCity, stats }) {
       setLoading(false);
     } 
   };
-  
+
   const handleCurrentLocation = async () => {
     setLoading(true);
     if (navigator.geolocation) {
@@ -72,7 +70,6 @@ function Temperature({ setCity, stats }) {
     }
     setLoading(false);
   };
-
 
   const weatherCondition = () => {
     if (stats.condition == "Clear") {
@@ -107,31 +104,10 @@ function Temperature({ setCity, stats }) {
     }
   }
 
-
-  const [forecast, setForecast] = useState(null);
-  
-  // start 5 day weather forecast ---------------------------------------------------------------------- //
-  
-  const fetchForecast = async () => {
-    console.log("Selected city: ", selectedCity);
-    try {
-      const response = await axios.get(
-        `https://api.openweathermap.org/data/2.5/forecast?q=${selectedCity}&units=metric&appid=274a4aa2515102a49db248030393d0f8`
-      );
-      setForecast(response.data);
-      console.log("Forecast Data: ", response.data);
-    } 
-    catch (err) {
-      setForecast(null);
-    }
-  };
-
-  // end 5 day weather forecast  ---------------------------------------------------------------------- //
-
   return (
     <div className="p-5 w-full max-w-lg mx-auto">
     
-     {/* start Country, State, City ----------------------------------------------------------------------------------- */}
+      {/* start Country, State, City ----------------------------------------------------------------------------------- */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
         <select className="p-2 border rounded" onChange={(e) => handleCountryChange(countries.find((c) => c.isoCode === e.target.value))}>
           <option value="">Select Country</option>
@@ -164,9 +140,9 @@ function Temperature({ setCity, stats }) {
           ))}
         </select>
       </div>
-        {/*  end Country, State, City ----------------------------------------------------------------------------------- */}
+      {/* end Country, State, City ----------------------------------------------------------------------------------- */}
     
-      <div className="flex flex-col sm:flex-row gap-2">
+      <div className="flex flex-col sm:flex-row gap-2 justify-center">
         <button className="bg-blue-600 text-white p-2 rounded w-full sm:w-auto" disabled={!selectedCity} onClick={handleSearch}>
           Search
         </button>
@@ -194,50 +170,13 @@ function Temperature({ setCity, stats }) {
             <p className="font-semibold text-[55px] text-white">{stats.temp}°C</p>
           </div>
 
-          <div className="flex justify-center items-center text-slate-300 mt-8 text-[25px]">
-            {stats.condition}
-          </div>
+          <div className="condition text-white text-center mt-3">{stats.condition}</div>
 
-          <div className="flex justify-center text-slate-400 mt-5 text-[15px]">
-            Today {stats.time} | &nbsp; <b>{stats.location}</b>
-          </div>
+          <div className="condition text-white text-center mt-3">Today {stats.time} | <b>{stats.location}</b></div>
         </>
       )}
 
-
-
       
-      {/*  start 5 day weather forecast  ---------------------------------------------------------------------- */}
-      <div className='"text-slate-200'>
-        <h1 className="text-slate-200 text-2xl col-span-2 text-center sm:text-center">5 Day Weather Forecast</h1>
-
-        {forecast && (
-        <div className="forecast-container">
-          {forecast.list.filter((_, index) => index % 8 === 0)
-          .map((item, index) => (
-            <div key={index} className="forecast-card">
-              <p className="date">
-                {new Date(item.dt_txt).toLocaleDateString("en-US", {
-                  weekday: "long",
-                })}
-              </p>
-              <img 
-              src={`http://openweathermap.org/img/wn/${item.weather[0].icon}@2x.png`} />
-              <p className="description">{item.weather[0].description}</p>
-              <p className="temp">{Math.round(item.main.temp)}C</p>
-              <div className="details">
-                <p>Humidity: {item.main.humidity}</p>
-                <p>Wind: {item.wind.speed}</p>
-                </div>
-            </div>
-          ))}
-        </div>
-      )}
-
-      </div>
-       {/* end 5 day weather forecast  ---------------------------------------------------------------------- */}
-
-
     </div>
   );
 }
