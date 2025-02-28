@@ -22,6 +22,7 @@ function App() {
     axios.get(apiURL)
     .then((response) => {
       setWeatherData(response.data);
+      // console.log("aaa",response.data)
       setLoading(false);
     });
 
@@ -53,6 +54,7 @@ function App() {
               setCity={setCity}
               stats={{
                 temp: weatherData.current.temp_c,
+                fern: weatherData.current.temp_f,
                 condition: weatherData.current.condition.text,
                 isDay: weatherData.current.is_day,
                 location: weatherData.location.name,
@@ -89,7 +91,8 @@ function App() {
           <h1 className="text-2xl text-center font-semibold">5 Day Weather Forecast of: {forecastData.city.name}</h1>
 
           <div className="grid grid-cols-1 sm:grid-cols-5 gap-10 mt-10 w-full max-w-6xl px-4">
-            {forecastData.list.filter((_, index) => index % 8 === 0) //badhi 8th mi item new day represent karshe
+            {forecastData.list.filter((_, index) => index % 8 === 0) //badhi 8th mi item new day represent karshe 
+            // _ unused parameter che value use nathi thati etle _ aa karyu che
               .map((value, index) => (<div key={index} className="forecast-card flex flex-col items-center p-4 w-full sm:w-auto">
                   <p className="date text-white text-center">
                     {new Date(value.dt_txt).toLocaleDateString("en-US", {
@@ -97,7 +100,7 @@ function App() {
                     })}
                   </p>
 
-                  <img src={`http://openweathermap.org/img/wn/${value.weather[0].icon}@2x.png`} alt={value.weather[0].description}                 className="w-16 h-16"/>
+                  <img src={`http://openweathermap.org/img/wn/${value.weather[0].icon}@2x.png`} alt={value.weather[0].description} className="w-16 h-16"/>
 
                   <p className="description text-white text-center">{value.weather[0].description}</p>
                   <p className="temp text-white text-center text-xl font-bold">{Math.round(value.main.temp)}°C</p>
@@ -110,6 +113,7 @@ function App() {
       )}
 
 { /*  end 5 day weather forecast  ---------------------------------------------------------------------- */}
+
     </div>
   );
 }

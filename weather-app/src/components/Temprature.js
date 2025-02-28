@@ -39,7 +39,7 @@ function Temperature({ setCity, stats }) {
       } 
       else {
         setCity(selectedCity);
-        console.log("City: ", selectedCity);
+        // console.log("City: ", selectedCity);
       }
     } 
     catch (error) {
@@ -58,7 +58,8 @@ function Temperature({ setCity, stats }) {
         const response = await axios.get(apiURL);
         if (response.data.error) {
           setError('Unable to fetch weather on current location');
-        } else {
+        } 
+        else {
           setError('');
           setCity(response.data.location.name);
         }
@@ -72,34 +73,44 @@ function Temperature({ setCity, stats }) {
   };
 
   const weatherCondition = () => {
-    if (stats.condition == "Clear") {
+    if (stats.condition === "Clear") 
+    {
       return <img src="//cdn.weatherapi.com/weather/64x64/night/113.png" alt="Clear image" />
     } 
-    else if (stats.condition == "Sunny") {
+    else if (stats.condition === "Sunny") 
+    {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/113.png" alt="Sunny image" />
     }
-    else if (stats.condition == "Cloudy") {
+    else if (stats.condition === "Cloudy") 
+    {
       return <img src="https://cdn.weatherapi.com/weather/64x64/day/119.png" alt="Cloudy image" />
     }
-    else if (stats.condition == "Overcast") {
+    else if (stats.condition === "Overcast") 
+    {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/122.png" alt="Overcast image" />
     }
-    else if (stats.condition == "Partly Cloudy" || stats.condition == "Partly cloudy") {
+    else if (stats.condition === "Partly Cloudy" || stats.condition === "Partly cloudy") 
+    {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/116.png" alt="Partly cloudy image" />
     }
-    else if (stats.condition == "Light rain" || stats.condition == "Moderate rain") {
+    else if (stats.condition === "Light rain" || stats.condition === "Moderate rain") 
+    {
       return <img src="//cdn.weatherapi.com/weather/64x64/night/296.png" alt="Light rain image" />
     }
-    else if (stats.condition == "Mist") {
+    else if (stats.condition === "Mist") 
+    {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/143.png" alt="Mist image" />
     }
-    else if (stats.condition == "Light snow") {
+    else if (stats.condition === "Light snow") 
+    {
       return <img src="https://cdn.weatherapi.com/weather/64x64/night/326.png" alt="Light snow" />
     }
-    else if (stats.condition == "Thundery outbreaks in nearby") {
+    else if (stats.condition === "Thundery outbreaks in nearby") 
+    {
       return <img src="https://cdn.weatherapi.com/weather/64x64/day/200.png" alt="Thundery outbreaks in nearby" />
     }
-    else{
+    else
+    {
       return <img src="//cdn.weatherapi.com/weather/64x64/day/113.png" alt="Default image" />
     }
   }
@@ -167,8 +178,9 @@ function Temperature({ setCity, stats }) {
           </div>
 
           <div className="flex justify-center mt-8">
-            <p className="font-semibold text-[55px] text-white">{stats.temp}°C</p>
+            <p className="font-semibold text-[25px] sm:text-[35px] md:text-[45px] text-white">Celcius: {stats.temp}°C</p>
           </div>
+            <p className="flex justify-center font-semibold text-[25px] sm:text-[35px] md:text-[45px] text-white">Fernhit: {stats.fern}°F</p>
 
           <div className="condition text-white text-center mt-3">{stats.condition}</div>
 
@@ -176,7 +188,6 @@ function Temperature({ setCity, stats }) {
         </>
       )}
 
-      
     </div>
   );
 }

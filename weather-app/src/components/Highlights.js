@@ -2,8 +2,8 @@ import React from 'react'
 
 function Highlights({stats}) {
   return (
-    <div className='p-2 text-white flex flex-col items-center text-transform scale-100 hover:scale-110 transition-transform duration-300 ease-in-out cursor-pointer '>
-        <h2 className='text-lg mt-2'>{stats.title}</h2>
+    <div className='p-2 text-white flex flex-col items-center'>
+        <h2 className='text-lg mt-2 '>{stats.title}</h2>
 
         <div className='mt-2'>
           <span className='text-4xl font-bold'>{stats.value}</span>
@@ -19,15 +19,13 @@ function Highlights({stats}) {
               <div className='ms-2'>{stats.direction}</div>
             </div>) :
             null
-          
         }
 
         {
           stats.title == "Humidity" ? (<div className="w-full mt-4 bg-gray-200 rounded-full h-1.5 mb-4 dark:bg-gray-700">
             <div className="bg-blue-600 h-1.5 rounded-full dark:bg-white" style={{width: `${stats.value}%`}}></div>
         </div>) :
-        null
-          
+        null  
         }
 </div>
   )
