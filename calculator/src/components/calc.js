@@ -2,136 +2,165 @@ import React, { useState, useEffect } from "react";
 import "./calc.css";
 
 const Calc = () => {
-  const [preState, setPreState] = useState("");
+  const [expression, setExpression] = useState("");
   const [curState, setCurState] = useState("");
-  const [input, setInput] = useState("0");
-  const [operator, setOperator] = useState(null);
-  const [total, setTotal] = useState(false);
- 
-
-  const inputNum = (e) => {
-    if (curState.includes(".") && e.target.innerText === ".") return;
-    if (total) 
-    {
-        setPreState("");
-    }
-
-    curState ? setCurState((pre) => pre + e.target.innerText) : setCurState(e.target.innerText)
-    setTotal(false);
-  };
-
-  useEffect(() => {
-    setInput(curState || "0");
-  }, [curState]);
-
-  const operatorType = (e) => {
-    setTotal(false);
-    
-    if (curState === "") return;
-    if (preState !== "") {
-      equals();
-    }
-        
-      setOperator(e.target.innerText);
-      setPreState(curState);
-      setCurState("");
-
-  };
-
+  const [result, setResult] = useState("0");
+  const [operations, setOperations] = useState([]);
   const [history, setHistory] = useState([]);
   const [showHistory, setShowHistory] = useState(false);
   const [showScientific, setShowScientific] = useState(false);
 
-  const equals = (e) => {
-    if(e?.target.innerText === "="){
-      setTotal(true)
-};
-    let result;
 
-    switch (operator) {
-      case "/": 
-          result = String(parseFloat(preState) / parseFloat(curState))
-          break;
+  const inputNum = (e) => {
+    const value = e.target.innerText;
+    if (value === "." && curState.includes(".")) return;
+    // console.log(value)
+    setCurState(curState + value);
+    setExpression(expression + value);
+    // console.log("ex: ",expression + value)
+  };
 
-      case "X": 
-          result = String(parseFloat(preState) * parseFloat(curState)) 
-          break;
+ 
+  useEffect(() => {
+    setResult(curState || "0");
+  }, [curState]);
 
-      case "+": 
-          result = String(parseFloat(preState) + parseFloat(curState))
-          break; 
+ 
+  const operatorType = (e) => {
+    if (!curState) return;
+    const op = e.target.innerText;
+    // console.log("operator: ",op)
+    setOperations([...operations, parseFloat(curState), op]);
+    // console.log(operations)
+    setExpression(expression + op);
+    setCurState("");
+  };
 
-      case "-": 
-          result = String(parseFloat(preState) - parseFloat(curState))
-          break;
 
-      case "sin": 
-          result = Math.sin(curState); 
-          break;
+  const calculate = () => {
+    if (!operations.length || !curState) return;
+    const allOps = [...operations, parseFloat(curState)];
+    // console.log(allOps) + - * / e badhu store karshe sathe value pn
+    let total = allOps[0]; // Start karshe first number thi
 
-      case "cos": 
-          result = Math.cos(curState); 
-          break;
+    for (let i = 1; i < allOps.length; i += 2) {
+      const op = allOps[i];
+      const num = allOps[i + 1];
+      // console.log("num",num)
+      if (op === "+"){
+        total += num
+      }
+      if (op === "-"){
+        total -= num
+      }
+      if (op === "X"){
+        total *= num
+      }
+      if (op === "/"){
+        total /= num
+      }
+    }
+    // console.log("total",total)
+    return total;
+  };
 
-      case "tan": 
-          result = Math.tan(curState); 
-          break;
+  
+  const equals = () => {
+    if (!expression) return;
+    const finalResult = calculate();
+    // console.log("fres: ", finalResult)
+    if (finalResult !== undefined) {
+      setHistory([...history, `${expression} = ${finalResult}`]);
+      setExpression(String(finalResult));
+      setResult(String(finalResult));
+      setCurState("");
+      setOperations([]);
+    }
+  };
 
-      case "log": 
-          result = Math.log10(curState); 
-          break;
 
-      case "ln": 
-          result = Math.log(curState); 
-          break;
-
-      case "√": 
-          result = Math.sqrt(curState); 
-          break;
-
-      case "^": 
-          result = Math.pow(preState, curState); 
-          break;
-
-      case "π": 
-          result = Math.PI; 
-          break;
-
-      case "e": 
-          result = Math.E; 
-          break;
-
-      case "!": 
-          result = factorial(curState); 
-          break;
-
-      default: 
-          return;
+  const scientificCalc = (operation) => {
+    if (!curState) return;
+    
+    const num = parseFloat(curState);
+    let calcResult;
+    
+    if (operation === "sin") {
+      calcResult = Math.sin(num)
     }
 
-    setHistory([...history, `${preState} ${operator} ${curState} = ${result}`]);
-    setPreState(result);
-    setCurState(result);
-    // console.log(result)
-    // setTotal(true);
+    else if (operation === "cos") {
+      calcResult = Math.cos(num)
+    }
+    else if (operation === "tan") {
+      calcResult = Math.tan(num)
+    }
+    else if (operation === "log") {
+      if (num <= 0) return;
+      calcResult = Math.log10(num);
+    }
+    else if (operation === "ln") {
+      if (num <= 0) return;
+      calcResult = Math.log(num);
+    }
+    else if (operation === "√") {
+      if (num < 0) return;
+      calcResult = Math.sqrt(num);
+    }
+    else if (operation === "sqr") {
+      calcResult = num * num
+    }
+    else if (operation === "π") {
+      calcResult = Math.PI
+    }
+    else if (operation === "e") {
+      calcResult = Math.E
+    }
+    else if (operation === "!") {
+      calcResult = factorial(num)
+    }
+
+    if (calcResult !== undefined) {
+      const newExpr = `${operation}(${curState}) = ${calcResult}`;
+      setExpression(newExpr);
+      setCurState(String(calcResult));
+      setHistory([...history, newExpr]);
+    }
   };
 
 
-  const factorial = (n) => (n === 0 ? 1 : n * factorial(n - 1));
+  const factorial = (n) => {
+    n = Math.floor(n);
+    if (n < 0) return undefined;
+    let result = 1;
+    for (let i = 2; i <= n; i++) {
+      result *= i;
+    }
+    return result;
+  };
 
+ 
   const reset = () => {
-    setPreState("");
+    setExpression("");
     setCurState("");
-    setInput("0");
+    setResult("0");
+    setOperations([]);
   };
 
+ 
   const percent = () => {
-    preState ? setCurState(String((parseFloat(curState) / 100) * preState)) :
-    setCurState(String(parseFloat(curState) / 100));
-}
+    if (!curState) return;
+    const percentVal = parseFloat(curState) / 100;
+    setCurState(String(percentVal));
+    setExpression(expression.slice(0, -curState.length) + percentVal);
+  };
 
+ 
   const del = () => {
-    setCurState(curState.slice(0, -1));
+    if (curState) {
+      setCurState(curState.slice(0, -1));
+      setExpression(expression.slice(0, -1));
+    }
   };
 
   return (
@@ -141,8 +170,7 @@ const Calc = () => {
         <span className="icon" onClick={() => setShowScientific(!showScientific)}><i className="fa-solid fa-calculator"></i></span>
       </div>
 
-   
-      <div className="screen">{input}</div>
+      <div className="screen">{expression || result}</div>
 
       {showHistory && (
         <div className="history-box">
@@ -154,47 +182,70 @@ const Calc = () => {
       )}
 
       <div className="wrapper">
-        {showScientific && (
+        {showScientific ? (
           <>
-            <button className="btn" onClick={operatorType}>sin</button>
-            <button className="btn" onClick={operatorType}>cos</button>
-            <button className="btn" onClick={operatorType}>tan</button>
-            <button className="btn" onClick={operatorType}>log</button>
-            <button className="btn" onClick={operatorType}>ln</button>
-            <button className="btn" onClick={operatorType}>(</button>
-            <button className="btn" onClick={operatorType}>)</button>
-            <button className="btn" onClick={operatorType}>!</button>
-            <button className="btn" onClick={operatorType}>^</button>
-            <button className="btn" onClick={operatorType}>√</button>
-            <button className="btn" onClick={operatorType}>π</button>
-            <button className="btn" onClick={operatorType}>e</button>
+            <div className="scientific-row">
+              <button className="btn" onClick={() => scientificCalc("sin")}>sin</button>
+              <button className="btn" onClick={() => scientificCalc("cos")}>cos</button>
+              <button className="btn" onClick={() => scientificCalc("tan")}>tan</button>
+              <button className="btn" onClick={() => scientificCalc("log")}>log</button>
+              <button className="btn" onClick={() => scientificCalc("ln")}>ln</button>
+            </div>
+            <div className="scientific-row">
+              <button className="btn" onClick={() => scientificCalc("!")}>!</button>
+              <button className="btn" onClick={() => scientificCalc("sqr")}>x²</button>
+              <button className="btn" onClick={() => scientificCalc("√")}>√</button>
+              <button className="btn" onClick={() => scientificCalc("π")}>π</button>
+              <button className="btn" onClick={() => scientificCalc("e")}>e</button>
+            </div>
+            
+            <div className="main-buttons">
+              <button className="btn light-gray" onClick={reset}>AC</button>
+              <button className="btn light-gray" onClick={percent}>%</button>
+              <button className="btn light-gray" onClick={del}>DEL</button>
+              <button className="btn orange" onClick={operatorType}>/</button>
+              <button className="btn" onClick={inputNum}>7</button>
+              <button className="btn" onClick={inputNum}>8</button>
+              <button className="btn" onClick={inputNum}>9</button>
+              <button className="btn orange" onClick={operatorType}>X</button>
+              <button className="btn" onClick={inputNum}>4</button>
+              <button className="btn" onClick={inputNum}>5</button>
+              <button className="btn" onClick={inputNum}>6</button>
+              <button className="btn orange" onClick={operatorType}>-</button>
+              <button className="btn" onClick={inputNum}>1</button>
+              <button className="btn" onClick={inputNum}>2</button>
+              <button className="btn" onClick={inputNum}>3</button>
+              <button className="btn orange" onClick={operatorType}>+</button>
+              <button className="btn" onClick={inputNum}>00</button>
+              <button className="btn" onClick={inputNum}>0</button>
+              <button className="btn" onClick={inputNum}>.</button>
+              <button className="btn orange" onClick={equals}>=</button>
+            </div>
           </>
+        ) : (
+          <div className="main-buttons">
+            <button className="btn light-gray" onClick={reset}>AC</button>
+            <button className="btn light-gray" onClick={percent}>%</button>
+            <button className="btn light-gray" onClick={del}>DEL</button>
+            <button className="btn orange" onClick={operatorType}>/</button>
+            <button className="btn" onClick={inputNum}>7</button>
+            <button className="btn" onClick={inputNum}>8</button>
+            <button className="btn" onClick={inputNum}>9</button>
+            <button className="btn orange" onClick={operatorType}>X</button>
+            <button className="btn" onClick={inputNum}>4</button>
+            <button className="btn" onClick={inputNum}>5</button>
+            <button className="btn" onClick={inputNum}>6</button>
+            <button className="btn orange" onClick={operatorType}>-</button>
+            <button className="btn" onClick={inputNum}>1</button>
+            <button className="btn" onClick={inputNum}>2</button>
+            <button className="btn" onClick={inputNum}>3</button>
+            <button className="btn orange" onClick={operatorType}>+</button>
+            <button className="btn" onClick={inputNum}>00</button>
+            <button className="btn" onClick={inputNum}>0</button>
+            <button className="btn" onClick={inputNum}>.</button>
+            <button className="btn orange" onClick={equals}>=</button>
+          </div>
         )}
-        
-        <button className="btn light-gray" onClick={reset}>AC</button>
-        <button className="btn light-gray" onClick={percent}>%</button>
-        <button className="btn light-gray" onClick={del}>⌫</button>
-        <button className="btn orange" onClick={operatorType}>/</button>
-
-        <button className="btn" onClick={inputNum}>7</button>
-        <button className="btn" onClick={inputNum}>8</button>
-        <button className="btn" onClick={inputNum}>9</button>
-        <button className="btn orange" onClick={operatorType}>X</button>
-
-        <button className="btn" onClick={inputNum}>4</button>
-        <button className="btn" onClick={inputNum}>5</button>
-        <button className="btn" onClick={inputNum}>6</button>
-        <button className="btn orange" onClick={operatorType}>-</button>
-
-        <button className="btn" onClick={inputNum}>1</button>
-        <button className="btn" onClick={inputNum}>2</button>
-        <button className="btn" onClick={inputNum}>3</button>
-        <button className="btn orange" onClick={operatorType}>+</button>
-
-        <button className="btn" onClick={inputNum}>00</button>
-        <button className="btn" onClick={inputNum}>0</button>
-        <button className="btn" onClick={inputNum}>.</button>
-        <button className="btn orange" onClick={equals}>=</button>
       </div>
     </div>
   );

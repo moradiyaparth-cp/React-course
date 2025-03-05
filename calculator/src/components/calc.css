@@ -9,7 +9,7 @@
     -webkit-app-region: none;
 }
 
-body{
+body {
     background-color: burlywood;
     display: grid;
     place-content: center;
@@ -18,18 +18,16 @@ body{
     font-size: 2rem;
 }
 
-
 .container {
     background-color: black;
     border-radius: 10px;
     padding: 1rem;
-    width: 320px;
+    width: 400px; /* Increased width to accommodate scientific buttons */
     margin: auto;
     text-align: center;
     -webkit-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
     -moz-box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
     box-shadow: 7px 7px 5px 0px rgba(50, 50, 50, 0.75);
-
 }
 
 .header {
@@ -49,6 +47,17 @@ body{
 }
 
 .wrapper {
+    padding: 0 5px;
+}
+
+.scientific-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 5px;
+    margin-bottom: 10px;
+}
+
+.main-buttons {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
     gap: 10px;
@@ -71,11 +80,11 @@ body{
     overflow: hidden;
 }
 
-.btn:hover{
+.btn:hover {
     background-color: gray;
 }
 
-.light-gray{
+.light-gray {
     background-color: gray;
     color: black;
 }
@@ -92,6 +101,8 @@ body{
     background-color: white;
     color: orange;
 }
-.icon{
+
+.icon {
     color: white;
+    cursor: pointer;
 }
