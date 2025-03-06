@@ -23,9 +23,7 @@ const ChatForm = ({ chatHistory, setChatHistory, generateBotResponse }) => {
          generateBotResponse([...chatHistory, {role: "user", text: userMessage}]);
         }, 600);
 
-         
     }
-
 
   return (
         <form action="#" className='chat-form' onSubmit={handleFormSubmit}>
