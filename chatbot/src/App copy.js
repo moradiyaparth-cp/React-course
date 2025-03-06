@@ -5,18 +5,15 @@ import ChatMessage from './components/ChatMessage'
 
 const App = () => {
   const [chatHistory, setChatHistory] = useState([])
-  const [showChatbot, setShowChatbot] = useState(false)
   const chatBodyRef = useRef()
 
- 
+  // helper function to update chat history
+  const updateHistory = (text) => {
+    setChatHistory(prev => [...prev.filter(msg => msg.text !== "Thinking..."), {role: "model", text}])
+  }
+
 
   const generateBotResponse = async (history) => {
-
-     // helper function to update chat history
-  const updateHistory = (text, isError = false) => {
-    setChatHistory(prev => [...prev.filter(msg => msg.text !== "Thinking..."), {role: "model", text, isError}])
-  };
-
 
     // format chat history for api request
     history = history.map(({role, text}) => ({role, parts: [{text}]}))
@@ -39,7 +36,7 @@ const App = () => {
       updateHistory(apiResponseText)
     }
     catch(error){
-        updateHistory(error.message, true)
+      console.log(error)
     }
   };
 
@@ -50,13 +47,7 @@ const App = () => {
 
 
   return (
-    <div className={`container ${ showChatbot ? 'show-chatbot' : ""}`}>
-
-        <button onClick={() => setShowChatbot(prev => !prev)} id='chatbot-toggler'>
-            <span className='material-symbols-rounded'>mode_comment</span>
-            <span className='material-symbols-rounded'>close</span>
-        </button>
-
+    <div className='container'>
       <div className="chatbot-popup">
         {/* Chatbot Header  */}
         <div className="chat-header">
@@ -65,7 +56,7 @@ const App = () => {
             <h2 className="logo-text">Chatbot</h2>
           </div>
 
-          <button onClick={() => setShowChatbot(prev => !prev)} className="material-symbols-rounded">keyboard_arrow_down</button>
+          <button className="material-symbols-rounded">keyboard_arrow_down</button>
         </div>
 
          {/* Chatbot Body  */}
@@ -73,7 +64,7 @@ const App = () => {
           <div className="message bot-message">
           <Chatboticon />
           <p className="message-text">
-            Hey Parth 👋<br /> How can I help you today?
+            Hey there 👋<br /> How can I help you today?
           </p>
           </div>
 
