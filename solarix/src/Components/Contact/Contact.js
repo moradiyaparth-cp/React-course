@@ -15,7 +15,7 @@ const Contact = () => {
       setResult("Sending....");
       const formData = new FormData(event.target);
   
-      formData.append("access_key", "8972bb97-4e46-4c9d-bf16-99acc831c33c");
+      formData.append("access_key", "your api key");
   
       const response = await fetch("https://api.web3forms.com/submit", {
         method: "POST",
@@ -38,9 +38,9 @@ const Contact = () => {
     <div className='contact'>
         <div className="contact-col">
             <h3>Send us a message <img src={msg_icon} alt="" /></h3>
-            <p>Feel free to reach out through contact form or find our contact information below. Your feedback, questions, and suggestions are important to us as we strive to provide exceptional service to our university community.</p>
+            <p>We value your input and are here to assist you. Whether you have questions, feedback, or suggestions regarding our solar solutions, we encourage you to get in touch. Your thoughts are essential as we work towards providing sustainable and efficient solar energy solutions for our community.</p>
             <ul>
-                <li><img src={mail_icon} alt="" />codesprint@gmail.com</li>
+                <li><img src={mail_icon} alt="" />smartenergysolutions99@gmail.com</li>
                 <li><img src={phone_icon} alt="" />+91 84015 45230</li>
                 <li><img src={location_icon} alt="" />Office No L-13, Akshardeep Complex, Near Jain Derasar, Shastri Nagar, Bhavnagar - 364001 (Near Jain Derasar)</li>
             </ul>

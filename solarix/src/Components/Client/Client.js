@@ -10,11 +10,10 @@ const Client = () => {
             <h3>Why Choose us Smart Energy Solutions ?</h3>
             <h2>Powering a Sustainable Future, Today</h2>
             
-            <p>Embark on a transformative educational journey with our university's comprehensive education programs. Our cutting-edge curriculum is designed to empower students with the knowledge, skills, and experiences needed to excel in the dynamic field of education.</p>
+            <p>At Smart Energy Solutions, we offer expert, tailored solar solutions designed to meet your unique energy needs. With years of experience and a commitment to using the highest quality products, we ensure maximum efficiency, reliability, and sustainability. Our team works closely with you to create a customized solar system that delivers long-term savings and reduces your environmental impact.</p>
 
-            <p>With a focus on innovation, hands-on learning, and personalized mentorship, our programs prepare aspiring educators to make a meaningful impact in classrooms, schools, and communities.</p>
+            <p>We pride ourselves on exceptional customer service and transparent pricing, making the transition to solar energy easy and affordable. From installation to ongoing support, we’re with you every step of the way, ensuring your system performs at its best for years to come.</p>
 
-            <p>Whether you aspire to become a teacher, administrator, counselor, or educational leader, our diverse range of programs offers the perfect pathway to achieve your goals and unlock your full potential in shaping the future of education.</p>
         </div>
         <div className="about-left">
             <img src={about_img} alt="" className='about-img'/>
