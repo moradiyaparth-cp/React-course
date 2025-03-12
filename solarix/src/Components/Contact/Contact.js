@@ -41,8 +41,8 @@ const Contact = () => {
             <p>Feel free to reach out through contact form or find our contact information below. Your feedback, questions, and suggestions are important to us as we strive to provide exceptional service to our university community.</p>
             <ul>
                 <li><img src={mail_icon} alt="" />codesprint@gmail.com</li>
-                <li><img src={phone_icon} alt="" />+91 98798 96896</li>
-                <li><img src={location_icon} alt="" />301 Sicilia Bussiness Hub, Mota Varachha, Surat</li>
+                <li><img src={phone_icon} alt="" />+91 84015 45230</li>
+                <li><img src={location_icon} alt="" />Office No L-13, Akshardeep Complex, Near Jain Derasar, Shastri Nagar, Bhavnagar - 364001 (Near Jain Derasar)</li>
             </ul>
         </div>
         <div className="contact-col">
