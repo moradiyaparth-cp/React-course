@@ -30,7 +30,7 @@ const App = () => {
         <Client />
 
         <Title subTitle='Contact Us' title='Get in Touch'/>
-        <Contact />
+        <Contact apiKey={process.env.REACT_APP_API}/>
 
         <Footer />
       </div>

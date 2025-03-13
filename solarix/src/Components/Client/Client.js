@@ -4,7 +4,7 @@ import about_img from '../../assets/im1.jpg'
 
 const Client = () => {
   return (
-    <div className='about'>
+    <div className='about client'>
         
         <div className="about-right">
             <h3>Why Choose us Smart Energy Solutions ?</h3>
@@ -16,7 +16,7 @@ const Client = () => {
 
         </div>
         <div className="about-left">
-            <img src={about_img} alt="" className='about-img'/>
+            <img src={about_img} alt="Client image" className='about-img'/>
         </div>
     </div>
   )
