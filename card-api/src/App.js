@@ -5,8 +5,8 @@ import Card_object from './components/Card_object';
 function App() {
   return (
     <div>
-      {/* <Card /> */}
-      <Card_object/>
+      <Card />
+      {/* <Card_object/> */}
     </div>
   );
 }
