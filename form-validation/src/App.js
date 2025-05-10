@@ -1,0 +1,222 @@
+import React, {useState} from 'react'
+import './App.css'
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
+
+const App = () => {
+ 
+  const [formdata, setformData] = useState({
+    fname: "",
+    email: "",
+    mobno: "",
+    standard: "",
+  })
+  // console.log("eee", formdata)
+
+  const [submitteddata, setsubmittedData] = useState([])
+  const [error, setError] = useState(false)
+  // const [storevalue, setstoreValue] = useState([])
+  const [updatebutton, setudateButton] = useState(false)
+  const [editIndex, setEditIndex] = useState()
+  const [emailError, setEmailError] = useState(false)
+
+  const validateEmail = (email) =>{
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    return emailRegex.test(email)   // emailRegex ne test method thi match karshe user je email add kare 
+  }
+
+  const data = (e) =>{
+    setformData({...formdata, [e.target.name]: e.target.value})
+    if (e.target.name === 'email') {
+      setEmailError(!validateEmail(e.target.value)) // jyare validateEmail ni value equal no hoy tyare setEmailError aa error show thase
+    }
+  }
+  
+  const handleSubmit = (e) =>{
+    e.preventDefault()
+    if(formdata.fname === "" || formdata.email === "" || !validateEmail(formdata.email) || formdata.mobno?.length !== 10 || formdata.standard === ""){
+      setError(true)
+      if(!validateEmail(formdata.email)){
+        setEmailError(true)  // jo formdata ni undar valid email no hoy to setemail error true thase ane error show thase
+      }
+    }
+    else
+    {
+      setsubmittedData([formdata, ...submitteddata])
+      setformData({
+          fname: "",
+          email: "",
+          mobno: "",
+          standard: ""
+        });
+      setError(false)
+      setEmailError(false)
+    }
+    // console.log("aaa", storevalue) // data check karshe
+  }
+
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const [deleteId,setDeleteId] = useState('');
+
+  function deleteData (i){
+    setDeleteId(i)
+    setShow(true)
+   }
+
+   function handleDelete(){
+    if (deleteId >= 0) {
+      let total = [...submitteddata]
+          total.splice(deleteId,1) // only selected record j delet karshe 
+          setsubmittedData(total)
+    }
+    setShow(false)
+   }
+   
+   const editData = (i) => {    
+     setudateButton(true)
+      setformData(submitteddata[i])
+      setEditIndex(i)
+   }
+
+  //  const handleUpdate = () =>{
+  //     submitteddata[editIndex] = formdata
+  //    console.log("index", submitteddata[editIndex])
+  //    setudateButton(false) 
+  //  }
+
+  const handleUpdate = (e) => {
+    e.preventDefault()
+    if(formdata.fname === "" || formdata.email === "" || !validateEmail(formdata.email) || formdata.mobno?.length !== 10 || formdata.standard === ""){
+      setError(true)
+      if(!validateEmail(formdata.email)){
+        setEmailError(true)  // jo formdata ni undar valid email no hoy to setemail error true thase ane error show thase
+      }
+      return
+    }
+
+    if (editIndex !== null) {
+      const updatedData = submitteddata.map((val,i) =>
+        i === editIndex ? formdata : val
+    );
+  
+    setsubmittedData(updatedData);
+    setudateButton(false);
+    setEditIndex(null);
+    setformData({
+        fname: "",
+        email: "",
+        mobno: "",
+        standard: ""
+      });
+      setError(false)
+      setEmailError(false)
+    }
+  }
+
+  const standardValue = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
+
+  return (
+    <>
+    <div>
+      <div>
+
+        <Modal show={show} onHide={handleClose}>
+            <Modal.Header closeButton>
+              <Modal.Title>Delet Data</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>Are You Want To Sure Delet Your Data!</Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={handleClose}>
+                No
+              </Button>
+              <Button variant="primary" onClick={handleDelete}>
+                Yes
+              </Button>
+            </Modal.Footer>
+          </Modal>
+
+      </div>
+
+       <form onSubmit={handleSubmit}>
+        
+            <div className="mb-3">
+              <label htmlFor="fname" className="">Enter Your Name</label>
+              <input type="text" name='fname' id='fname' value={formdata.fname} className="form-control" onChange={data} />
+              {formdata.fname === "" ? error && <span style={{color:"red"}}>Please enter your name</span>: !error || ""}
+            </div>
+            {/* fname jo null hoy true thay to undar error print thase, nahi to else ma jashe */}
+        
+            <div className="mb-3">
+              <label htmlFor="email" className="form-label">Enter Your Email address</label>
+              <input type="email" name='email' id='email' value={formdata.email} className="form-control" onChange={data}/>
+              {formdata.email === "" ? error && <span style={{color:"red"}}>Please enter your email</span> : 
+              emailError && <span style={{color:"red"}}>Please enter valid email</span> }
+            </div>
+
+            <div className="mb-3">
+              <label htmlFor="mobno" className="form-label">Enter Your Mobile Number</label>
+              <input type="number" name='mobno' id='mobno' value={formdata.mobno} className="form-control" onChange={data} />
+              {formdata.mobno?.length !== 10 ? error && <span style={{color:"red"}}>Mobile number must be atleast 10 number</span> : !error || ""}
+            </div>
+
+            <label htmlFor="select" className="form-label">Select Your Standard</label>
+            <select className="form-select" aria-label="Default select example" id='standard' name='standard' value={formdata.standard} onChange={data}>
+              <option value="" selected>- Select -</option>
+              {standardValue.map((e, index)=><option key={index} value={e}>{e}</option>)}
+              {/* <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+              <option value="7">7</option>
+              <option value="8">8</option>
+              <option value="9">9</option>
+              <option value="10">10</option> */}
+          </select>
+
+              <p>
+              {formdata.standard === "" ? error && <span style={{color:"red"}}>Please select your standard</span> : !error || ""}
+              </p>
+
+           {!updatebutton? <button type="submit" className="btn btn-primary my-3">Submit</button> :
+            <button type="submit" className="btn btn-primary my-3" onClick={handleUpdate}>Update</button> }
+      </form>
+      <div>      
+      </div>
+    </div>
+<div>
+{
+      <table>
+        <tr>
+            <th colSpan={6} ><h3>Submitted Data:</h3></th>
+        </tr>
+        <tr>
+            <th>No.</th>
+            <th>Fullname</th>
+            <th>Email</th>
+            <th>Mobileno</th>
+            <th>Standard</th>
+            <th>Action</th>
+        </tr>
+        {submitteddata.map((val,i)=>{
+        return (
+        <tr key={i}>
+            <td>{i+1}</td>
+            <td>{val.fname}</td>
+            <td>{val.email}</td>
+            <td>{val.mobno}</td>
+            <td>{val.standard}</td>
+            <td><button type="button" className="btn btn-primary" onClick={()=>editData(i)}>Edit</button> <button type="button" className="btn btn-danger" onClick={()=>deleteData(i)}>Delete</button></td>
+        </tr>
+          )
+        })}
+    </table>
+       
+}
+</div>
+    </>
+  )
+}
+export default App
