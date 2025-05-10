@@ -1,0 +1,14 @@
+.about-menu{
+    display: flex;
+    list-style-type: none;
+    gap: 20px;
+    font-weight: bold;
+    margin: 25px;
+}
+.about-menu h3{
+    margin: 0;
+}
+.heading{
+    color: blue;
+    text-align: center;
+}
